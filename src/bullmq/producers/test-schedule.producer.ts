@@ -13,7 +13,7 @@ export class TestScheduleQueueProducer {
   ) {}
 
   async enqueueTestSchedule(job: { delay: number }): Promise<void> {
-    await this.bullMQManager.addJob(
+    await this.bullMQManager.addRepeatableJob(
       EMAIL_QUEUE,
       EMAIL_JOB_NAME,
       {
@@ -21,8 +21,11 @@ export class TestScheduleQueueProducer {
         delay: job.delay,
       },
       {
+        every: job.delay, // repeat every X ms (infinite)
+      },
+      {
         attempts: 3,
-        delay: job.delay,
+        // delay: job.delay,
         backoff: {
           type: 'exponential',
           delay: job.delay,
