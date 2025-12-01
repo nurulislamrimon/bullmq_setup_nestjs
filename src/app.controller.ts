@@ -9,4 +9,9 @@ export class AppController {
   getHello() {
     return this.appService.sendMail();
   }
+
+  @Get('schedule')
+  testSchedule() {
+    return this.appService.testSchedule();
+  }
 }
