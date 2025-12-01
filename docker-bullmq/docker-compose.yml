@@ -1,0 +1,48 @@
+services:
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - bull-network
+
+  bullboard:
+    image: deadly0/bull-board:latest
+    container_name: bullboard
+    restart: unless-stopped
+    ports:
+      - "8090:3000"
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - redis
+    networks:
+      - bull-network
+
+  redis-commander:
+    image: ghcr.io/joeferner/redis-commander:latest
+    container_name: dev_redis_commander
+    restart: always
+    ports:
+      - "8083:8081"
+    environment:
+      REDIS_HOSTS: local:redis:6379
+      HTTP_USER: root
+      HTTP_PASSWORD: admin
+    depends_on:
+      - redis
+    networks:
+      - bull-network
+# Define volumes and networks
+volumes:
+  redis_data:
+    driver: local
+
+networks:
+  bull-network:
+    driver: bridge

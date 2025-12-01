@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { BaseBullConsumer } from './base.consumer';
 import { IEmailJob } from 'src/lib/email/email.interface';
 
